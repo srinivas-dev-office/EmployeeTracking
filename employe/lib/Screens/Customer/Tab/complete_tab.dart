@@ -1,195 +1,189 @@
-
-
 import 'package:employe/untils/exports.dart';
 
-class CompletedTab extends StatelessWidget {
+class CompletedTab extends StatefulWidget {
   const CompletedTab({super.key});
 
   @override
+  _CompletedTabState createState() => _CompletedTabState();
+}
+
+class _CompletedTabState extends State<CompletedTab> {
+  @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
       backgroundColor: kwhite,
       body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Container(
-                 // height: 170.h,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16), 
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), 
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
                   ),
-                  child: Column(
-                    children: [
-                      // Top Row
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10, left: 0.3, right: 0.3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Top Row with Name and Date
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Srinivas",
+                          style: GoogleFonts.inter(
+                            fontSize: 15.sp,
+                            fontWeight: kFW800,
+                            color: KgradientBlack,
+                          ),
+                        ),
+                        Text(
+                          "29/04/2025",
+                          style: GoogleFonts.inter(
+                            fontSize: kTwelveFont,
+                            fontWeight: kFW600,
+                            color: KgradientBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Second Row with Email and Phone Number
+                    Row(
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Loan ID",
+                              "Siva Kumar",
                               style: GoogleFonts.inter(
-                                fontSize: kTwelveFont,
-                                fontWeight: kFW500,
-                                color: kgrey,
+                                fontSize: kFourteenFont,
+                                fontWeight: kFW600,
+                                color: KdarkText,
                               ),
                             ),
                             Text(
-                              "Completed",
+                              "Siva2004@gmail.com",
                               style: GoogleFonts.inter(
                                 fontSize: kTwelveFont,
-                                fontWeight: kFW800,
-                                color: kActiveTabColor,
+                                fontWeight: kFW500,
+                                color: KgradientBlack,
                               ),
                             ),
                           ],
                         ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CircleAvatar(
-                            radius: 25,
-                            child: Image.asset(
-                              'assets/images/profile.png',
-                              height: 50.h,
+                        const Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "7878278282",
+                              style: GoogleFonts.inter(
+                                fontSize: kTwelveFont,
+                                fontWeight: kFW600,
+                                color: const Color.fromARGB(255, 116, 227, 114),
+                              ),
                             ),
-                          ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    const Divider(),
+                    const SizedBox(height: 5),
 
-                          const SizedBox(
-                              width: 8), 
-                          
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Siva Kumar",
-                                style: GoogleFonts.inter(
-                                  fontSize: kFourteenFont,
-                                  fontWeight: kFW600,
-                                  color: KdarkText,
-                                ),
+                    // Retailer and Order Info Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Retailer",
+                              style: GoogleFonts.inter(
+                                fontSize: kTwelveFont,
+                                fontWeight: kFW400,
+                                color: korange,
                               ),
-                              Text(
-                                "Checking ••8871",
-                                style: GoogleFonts.inter(
-                                  fontSize: kTwelveFont,
-                                  fontWeight: kFW500,
-                                  color: kgrey,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              "vibho technologies privated",
+                              style: GoogleFonts.inter(
+                                fontSize: kTwelveFont,
+                                fontWeight: kFW600,
+                                color: KgradientBlack,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Total Order Placed",
+                              style: GoogleFonts.inter(
+                                fontSize: kTenFont,
+                                fontWeight: kFW400,
+                                color: KgradientBlack,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(
+                              Icons.shopping_bag_outlined,
+                              color: KgradientBlack,
+                              size: 18.sp,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
 
-                         const Spacer(),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                "3yrs",
-                                style: GoogleFonts.inter(
-                                  fontSize: kFourteenFont,
-                                  fontWeight: kFW600,
-                                  color: KdarkText,
-                                ),
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                "8.5%",
-                                style: GoogleFonts.inter(
-                                  fontSize: kFourteenFont,
-                                  fontWeight: kFW600,
-                                  color: kgrey,
-                                ),
-                              ),
-                            ],
+                    // Status Row
+                    Row(
+                      children: [
+                        Text(
+                          "Status: ",
+                          style: GoogleFonts.inter(
+                            fontSize: kTwelveFont,
+                            fontWeight: kFW600,
+                            color: KgradientBlack,
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      const Divider(),
-                      SizedBox(
-                        height: 5.h,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Type of loan",
-                                style: GoogleFonts.inter(
-                                  fontSize: kTwelveFont,
-                                  fontWeight: kFW400,
-                                  color: kgrey,
-                                ),
-                              ),
-                               SizedBox(
-                        height: 3.h,
-                      ),
-                              Text(
-                                "₹48,158.00",
-                                style: GoogleFonts.inter(
-                                  fontSize: kEighteenFont,
-                                  fontWeight: kFW600,
-                                  color: KdarkText,
-                                ),
-                              ),
-                            ],
+                        ),
+                        Text(
+                          "Completed",
+                          style: GoogleFonts.inter(
+                            fontSize: kTwelveFont,
+                            fontWeight: kFW600,
+                            color: Colors.green, // Green color for completed status
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.calendar_month_outlined,
-                                  color: Kgreen, size: 18.sp),
-                              SizedBox(width: 4.w),
-                              Text(
-                                "12-Apr-2023",
-                                style: GoogleFonts.inter(
-                                  fontSize: kTwelveFont,
-                                  fontWeight: kFW400,
-                                  color: Kgreen,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                  ],
                 ),
-              ],
-            );
-          }),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

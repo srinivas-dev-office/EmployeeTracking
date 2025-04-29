@@ -19,7 +19,7 @@ class _CustomLogoutState extends State<CustomLogout> {
       title: Text('Are You Sure',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 13.sp, fontWeight: kFW700, color: Kgreen)),
+          style: TextStyle(fontSize: 13.sp, fontWeight: kFW700, color: korange)),
       content: Text('You Want To LogOut?',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

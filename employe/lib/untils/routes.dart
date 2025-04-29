@@ -38,10 +38,10 @@ class Routes {
         page: () =>   CustomersList() ),
          
        
-        //  GetPage(
-        // name: Kinvoice,
-        // transition: Transition.rightToLeft,
-        // page: () =>   InvoicePage()),
+         GetPage(
+        name: Kinvoice,
+        transition: Transition.rightToLeft,
+        page: () =>   InvoicePage()),
          
   ];
 }
