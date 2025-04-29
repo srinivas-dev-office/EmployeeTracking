@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                  label: "LOGIN",
                  isLoading: false,
                  onTap: () {
-                 // Get.toNamed(kHomePage);
+                 Get.toNamed(kHomePage);
                   //  var payload = {
                   //    "email": apicontroller.emailController.text,
                   //    "password": apicontroller.passwordController.text,

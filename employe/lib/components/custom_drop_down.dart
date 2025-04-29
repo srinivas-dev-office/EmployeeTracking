@@ -24,7 +24,7 @@ class CustomDropDown extends StatelessWidget {
     this.onSaved,
     this.value,
     required this.item,
-    required this.validationMessage, // Custom validation message
+    required this.validationMessage, required bool shouldValidate, // Custom validation message
   }) : super(key: key);
 
   @override

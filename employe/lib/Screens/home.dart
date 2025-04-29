@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Controller initialization
   Dashboardcontroller apicontroller = Get.put(Dashboardcontroller());
 
   @override
@@ -22,7 +21,6 @@ class _HomeState extends State<Home> {
     apicontroller.getadminbyid();
   }
 
-  // Logout action
   Future<bool> _logoutAction() async {
     return (await showDialog(
         context: context, builder: (context) => const CustomLogout()));
@@ -35,26 +33,24 @@ class _HomeState extends State<Home> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text(
-            "Employe Tracking",
+            "Employee Tracking",
             style: TextStyle(
               fontSize: 18.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+              fontWeight: kFW700,
+              color: kblack,
             ),
           ),
           automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            _buildLogoutAction(),
             IconButton(
               onPressed: _logoutAction,
-              icon: const Icon(
-                Icons.power_settings_new_rounded,
-                color: Colors.white,
-              ),
+              icon:  Icon(Icons.logout, color: Kred.withOpacity(0.6)),
+              tooltip: "Logout",
             ),
           ],
           flexibleSpace: Container(
@@ -67,21 +63,35 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        body: _buildBody(),
-      ),
+        body: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            // gradient: LinearGradient(
+            //   colors: [kGreen, kgreen1, kgreen2],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child:
+                  _buildAdminDetails()),
+            ),
+          ),
+        ),
+      
     );
   }
 
-  // Handle back press with a custom exit message
   Future<bool> _onWillPop() async {
     final difference = DateTime.now().difference(timeBackPressed);
     final isExitWarning = difference >= const Duration(seconds: 2);
     timeBackPressed = DateTime.now();
 
     if (isExitWarning) {
-      const message = 'Press back again to exit';
       Fluttertoast.showToast(
-        msg: message,
+        msg: 'Press back again to exit',
         fontSize: kTwelveFont,
         textColor: kwhite,
         backgroundColor: kblack,
@@ -93,156 +103,97 @@ class _HomeState extends State<Home> {
     }
   }
 
-  // Logout button widget
-  Widget _buildLogoutAction() {
-    return GestureDetector(
-      onTap: () {
-        _logoutAction();
-      },
-      child: Text(
-        "Logout",
-        style: TextStyle(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  // Body widget
-  Widget _buildBody() {
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      child: Obx(() => apicontroller.adminbyidloading.value
-          ? const Center(child: CircularProgressIndicator())
-          : _buildAdminDetails()),
-    );
-  }
-
-  // Admin details widget
   Widget _buildAdminDetails() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //  _buildAdminInfoRow(
-        //     "Company Name ", apicontroller.adminbyiddata["data"]["name"]),
-        //      SizedBox(height: 5.h),
-        // _buildAdminInfoRow(
-        //     "Email Id ", apicontroller.adminbyiddata["data"]["email"]),
-        // SizedBox(height: 5.h),
-        // _buildAdminInfoRow("Mobile Number ",
-        //     apicontroller.adminbyiddata["data"]["mobile_no"]),
-        // SizedBox(height: 5.h),
-        // Text(
-        //   "Address : ",
-        //   style: GoogleFonts.poppins(
-        //     fontSize: 14.sp,
-        //     fontWeight: kFW500,
-        //     color: KText,
-        //   ),
-        // ),
-        // SizedBox(height: 5.h),
-        // Text(
-        //   apicontroller.adminbyiddata["data"]["address"],
-        //   style: GoogleFonts.poppins(
-        //     fontSize: 14.sp,
-        //     fontWeight: kFW600,
-        //   ),
-        // ),
-        // SizedBox(height: 10.h),
-        // Divider(height: 10.h),
-        Login_time(),
-        SizedBox(height: 10.h),
-        _buildGrid(),
-      ],
-    );
-  }
-
-  // Admin info row widget
-  Widget _buildAdminInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          "$label : ",
-          style: GoogleFonts.poppins(
-            fontSize: 14.sp,
-            fontWeight: kFW500,
-            color: KText,
-          ),
-        ),
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 14.sp,
-            fontWeight: kFW600,
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Grid widget for actions
-  Widget _buildGrid() {
     return 
     Column(
-     
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildGridButton('assets/images/register.png', 'Add Customer',
-            () {
-          Get.toNamed(kregister);
-        }),
-        _buildGridButton('assets/images/register.png', "Customers List",
-            () {
-          Get.toNamed(kcustomerlist);
-        }),
-     
-      ],
-    );
-  }
-
-  // Grid button widget
-  Widget _buildGridButton(String imagePath, String text, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(bottom: 10),
-        padding: EdgeInsets.all(10),
-       // height: 45.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 5.0,
-              spreadRadius: 1.0,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        Row(
+       
           children: [
-            Image.asset(
-              imagePath,
-              width: 50.0,
-              height: 50.0,
-              color: kGreen,
-            ),
-            const SizedBox(height: 10.0),
             Text(
-              text,
-              textAlign: TextAlign.center,
+              "Welcome",
               style: GoogleFonts.poppins(
                 fontSize: 16.sp,
-                fontWeight: kFW700,
+                fontWeight: FontWeight.w700,
+                color: kpuple,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+             "Srinivas Alathur !..",
+              style: GoogleFonts.poppins(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
+        ),
+        const SizedBox(height: 20),
+        Login_time(),
+        const SizedBox(height: 20),
+        _buildActionCards(),
+      ],
+    );
+  }
+
+  Widget _buildActionCards() {
+    return Column(
+      children: [
+        _buildActionTile(
+          iconPath: 'assets/images/register.png',
+          label: 'Add Customer',
+          onTap: () => Get.toNamed(kregister),
+        ),
+        const SizedBox(height: 16),
+        _buildActionTile(
+          iconPath: 'assets/images/register.png',
+          label: 'Customers List',
+          onTap: () => Get.toNamed(kcustomerlist),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionTile({
+    required String iconPath,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 6,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: kGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Image.asset(
+                  iconPath,
+                  width: 40,
+                  height: 40,
+                  color: kGreen,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const Spacer(),
+              const Icon(Icons.arrow_forward_ios, size: 18, color: kGreen),
+            ],
+          ),
         ),
       ),
     );

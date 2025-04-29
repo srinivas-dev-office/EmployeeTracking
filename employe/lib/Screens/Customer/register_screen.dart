@@ -1,5 +1,3 @@
-// ignore_for_file: unused_element, depend_on_referenced_packages, use_build_context_synchronously, prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -33,15 +31,16 @@ class Framedata {
 class _RegisterPageState extends State<RegisterPage> {
   final Framedata data = Framedata();
   final _formKey = GlobalKey<FormState>();
-  
+
   File? selectedImage;
   File? selectedDoc;
-  
+
   bool isLoading = false;
 
   String? _gender;
+  String? selectedCategory;
 
-  final _focusNodes = List.generate(8, (index) => FocusNode());
+  final _focusNodes = List.generate(9, (index) => FocusNode());
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
 
@@ -80,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ..headers.addAll({
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "Authorization": "Bearer ${UserSimplePreferences.getToken()}",
+          "Authorization": "Bearer \${UserSimplePreferences.getToken()}",
         })
         ..fields['name'] = data.name
         ..fields['mobile_no'] = data.mobilenumber
@@ -123,7 +122,18 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: kgrey,
       appBar: AppBar(
-        title: Text("Add Client", style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: KgradientBlack, size: 22),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Add Customer',
+          style: GoogleFonts.inter(
+            fontSize: kEighteenFont,
+            fontWeight: kFW600,
+            color: KgradientBlack,
+          ),
+        ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -161,110 +171,56 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomTextFormField(
-                  isMandatory: true,
-                  focusNode: _focusNodes[0],
-                  onChanged: (val) => data.name = val,
-                  hintText: "Name",
-                  labelText: 'Name',
-                  validator: (val) => val!.isEmpty ? 'Please enter name' : null,
-                  maxLines: 1,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w), readOnly: false,
-                ),
-                SizedBox(height: 10.h),
-                CustomTextFormField(
-                  isMandatory: true,
-                  maxLines: 1,
-                  focusNode: _focusNodes[1],
-                  onChanged: (val) => data.surname = val,
-                  hintText: "Company Name",
-                  labelText: 'Company Name',
-                  validator: (val) => val!.isEmpty ? 'Please enter company name' : null,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w), readOnly: false,
-                ),
-                SizedBox(height: 10.h),
-                CustomTextFormField(
-                  isMandatory: true,
-                  readOnly: false,
-                  focusNode: _focusNodes[2],
-                  onChanged: (val) => data.emailAddress = val,
-                  hintText: "Email ID",
-                  labelText: 'Email ID',
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Please enter Email ID';
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(val)) return 'Enter valid Email ID';
-                    return null;
-                  },
-                  contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w), maxLines: 1,
-                ),
-                SizedBox(height: 10.h),
-                CustomTextFormField(
-                  isMandatory: true,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 10,
-                  readOnly: false,
-                  focusNode: _focusNodes[3],
-                  onChanged: (val) => data.mobilenumber = val,
-                  hintText: "Mobile Number",
-                  labelText: 'Mobile Number',
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Please enter mobile number';
-                    if (!RegExp(r'^[0-9]+$').hasMatch(val) || val.length != 10) return 'Enter a valid 10-digit mobile number';
-                    return null;
-                  },
-                  prefix: Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 15),
-                    child: Text("+91", style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                buildFormCard([
+                  buildTextField(0, 'Client Name', (val) => data.name = val),
+                  buildTextField(1, 'Company Name', (val) => data.surname = val),
+                  buildTextField(2, 'Email ID', (val) => data.emailAddress = val, validator: emailValidator),
+                  buildTextField(3, 'Mobile Number', (val) => data.mobilenumber = val, keyboardType: TextInputType.phone, maxLength: 10, prefix: Text('+91 ')),
+                  CustomDropDown(
+                    shouldValidate: true,
+                    label: "Category",
+                    isMandatory: true,
+                    item: const ["Framer", "Retailer", "Distributor"],
+                    value: selectedCategory,
+                    onChanged: (value) => setState(() => selectedCategory = value),
+                    hintText: 'Select Category',
+                    validationMessage: 'Please select Category',
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w), maxLines: 1,
-                ),
-                SizedBox(height: 10.h),
-                CustomTextFormField(
-                  isMandatory: false,
-                  focusNode: _focusNodes[4],
-                  onChanged: (val) => data.address = val,
-                  hintText: "Description",
-                  labelText: 'Description',
-                  maxLines: 4,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w), readOnly: false,
-                ),
-                SizedBox(height: 20.h),
-                Text('Profile Image', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
-                SizedBox(height: 10.h),
-                GestureDetector(
-                  onTap: () => pickFile(isDocument: false, type: 'gallery'),
-                  child: DottedBorder(
-                    color: Colors.grey,
-                    dashPattern: [6, 3],
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(12),
-                    child: Container(
-                      height: 150.h,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: selectedImage != null
-                          ? Image.file(selectedImage!, fit: BoxFit.cover)
-                          : Icon(Icons.camera_alt, color: Colors.grey, size: 50),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 14.h),
+                  buildTextField(4, 'Address', (val) => data.address = val),
+                  buildTextField(5, 'Description', (val) => data.address = val, maxLines: 4),
+                ]),
                 Text('Document Upload', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
                 SizedBox(height: 10.h),
                 GestureDetector(
                   onTap: () => pickFile(isDocument: true, type: 'gallery'),
                   child: DottedBorder(
-                    color: Colors.grey,
-                    dashPattern: [6, 3],
+                    color: kGreen,
+                    strokeWidth: 2,
+                    dashPattern: [6, 4],
                     borderType: BorderType.RRect,
                     radius: Radius.circular(12),
                     child: Container(
                       height: 150.h,
                       width: double.infinity,
                       alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: selectedDoc != null
-                          ? Image.file(selectedDoc!, fit: BoxFit.cover)
-                          : Icon(Icons.file_upload, color: Colors.grey, size: 50),
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.file(selectedDoc!, fit: BoxFit.cover),
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.cloud_upload_outlined, color: kGreen, size: 40),
+                                SizedBox(height: 8),
+                                Text("Tap to upload document", style: TextStyle(color: Colors.grey)),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -275,5 +231,53 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  Widget buildFormCard(List<Widget> children) {
+    return Container(
+      padding: EdgeInsets.all(12.r),
+      margin: EdgeInsets.only(bottom: 20.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget buildTextField(int index, String label, Function(String) onChanged,
+      {TextInputType? keyboardType, int? maxLength, int maxLines = 1, Widget? prefix, String? Function(String?)? validator}) {
+    return Column(
+      children: [
+        CustomTextFormField(
+          isMandatory: true,
+          focusNode: _focusNodes[index],
+          onChanged: onChanged,
+          hintText: label,
+          labelText: label,
+          keyboardType: keyboardType,
+          maxLength: maxLength,
+          maxLines: maxLines,
+          prefix: prefix != null ? Padding(padding: EdgeInsets.only(left: 10,top: 12), child: prefix) : null,
+          validator: validator ?? (val) => val!.isEmpty ? 'Please enter $label' : null,
+          contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 10.w),
+          readOnly: false,
+        ),
+        SizedBox(height: 10.h),
+      ],
+    );
+  }
+
+  String? emailValidator(String? val) {
+    if (val == null || val.isEmpty) return 'Please enter Email ID';
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$').hasMatch(val)) return 'Enter valid Email ID';
+    return null;
   }
 }
