@@ -8,7 +8,7 @@ export 'package:flutter/material.dart';
 
 export 'package:employe/main.dart';
 export 'package:employe/untils/splash_screen.dart';
-export 'package:employe/Screens/wastepicker_invoice.dart';
+export 'package:employe/Screens/invoice.dart';
 
 export 'package:employe/Login/login.dart';
 export 'package:employe/untils/constants.dart';
